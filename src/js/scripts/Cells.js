@@ -11,12 +11,10 @@ export default class Cells {
   createCell() {
     let cell = new createjs.Shape();
     // cell.graphics.beginFill('#b9dd77');
-    console.log(this.color);
-    
     cell.graphics.beginFill(this.color).beginStroke('#b9dd77').drawRect(0, 0, this.size, this.size).endStroke();
     cell.graphics.endFill();
-    cell.x = (this.y * this.size)+1;
-    cell.y = (this.x * this.size)+1;
+    cell.x = (this.x * this.size)+1;
+    cell.y = (this.y * this.size)+1;
     cell.height = this.size;
     cell.width = this.size;
     return cell;
@@ -35,6 +33,26 @@ export default class Cells {
     bomb.y = (this.y * this.size)+1;
     bomb.height = this.size;
     bomb.width = this.size;
+    bomb.visible = false;
+    circle.visible = false;
     return [bomb, circle];
+  }
+
+  createNumber(number) {
+    // console.log(number);
+    if (number !== null) {
+      let textBg = new createjs.Shape();
+      textBg.graphics.beginFill('#e5c29f');
+      textBg.graphics.drawRect(0, 0, this.size, this.size).endStroke();
+      textBg.graphics.endFill();
+      textBg.x = (this.x * this.size)+1;
+      textBg.y = (this.y * this.size)+1;
+      let text = new createjs.Text(`${number}`, `${this.size/2}px Arial`, '#1976d2');
+      text.x = (this.x * this.size) +1 + this.size/3;
+      text.y = (this.y * this.size) +1 + this.size/1.5;
+      text.textBaseline = "alphabetic";
+      return [textBg, text];
+    }
+    return false;
   }
 }
