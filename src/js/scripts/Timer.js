@@ -13,7 +13,13 @@ export default function Timer (start) {
     var displayNode = document.getElementById('timer');
     var numSeconds = 0;
     (function timer() {
-      requestAnimFrame(timer);
+      try {
+        requestAnimFrame(timer);
+      }
+      catch {
+        console.log("end");
+        
+      }
       var currentTime = (new Date()).getTime();
 
       if (currentTime - lastTime >= 1000) {
@@ -24,6 +30,6 @@ export default function Timer (start) {
     }());
 }
 else {
-  numSeconds = 0;
+ delete window.requestAnimFrame;
 }
 };

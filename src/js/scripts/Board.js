@@ -16,6 +16,7 @@ class Board {
   this.bombs = 0;
   this.opened = 0;
   this.hiddenBombs = [];
+  this.flags = [];
   $('.main-wrapper').append(this.myCanvas);
   this.ctx = $(this.myCanvas)[0].getContext('2d');
   $(this.myCanvas)[0].width = (this.size * this.boardLength.x)+this.boardLength.x;
@@ -50,20 +51,34 @@ class Board {
   }
 
   onClick(e) {
-      // window.oncontextmenu = null
-      // console.log(e);
-      if (!e.nativeEvent.button) {
+    let clicked = this.cell[Math.round(e.target.x/this.size)][Math.round(e.target.y/this.size)];
+
+    if (!e.nativeEvent.button && !clicked.flag) {
         this.clickCount += 1;
-        let clicked = this.cell[Math.round(e.target.x/this.size)][Math.round(e.target.y/this.size)];
         if (this.clickCount === 1) {
           this.onFirstClick(clicked);
         } else {
           this.handleClick(clicked);
         }
     }
-    else {
+    else if (e.nativeEvent.button && clicked.flag) {
+      clicked.flag = false;
+      this.stage.removeChild(clicked.store[0]);
+      this.stage.removeChild(clicked.store[1]);
+      this.stage.removeChild(clicked.store[2]);
+      clicked.store = null;
+    }
+    else if (!clicked.opened && !clicked.flag) {
+      clicked.flag = true;
+      let flag = clicked.createFlag();
+      this.stage.addChild(flag[0]);
+      this.flags.push(flag[0]);
+      this.stage.addChild(flag[1]);
+      this.flags.push(flag[1]);
+      this.stage.addChild(flag[2]);
+      this.flags.push(flag[2]);
+      clicked.store = flag;
       console.log("right click");
-      
     }
   }
 
@@ -109,8 +124,7 @@ class Board {
     else if (this.cell[clicked.x][clicked.y].count === null) {
       this.makeBombsVisible();
       Timer(false);
-      
-     console.log("loser");
+      console.log("loser");
      
     } 
     else {
@@ -127,6 +141,12 @@ class Board {
     for (let i = 0; i < this.hiddenBombs.length; i += 1) {
       this.hiddenBombs[i].visible = true;
     }
+
+    for (let i = 0; i < this.flags.length; i += 1) {
+      this.stage.removeChild(this.flags[i])
+    }
+
+    alert("Loser Loser Paneer Dinner");
   }
 
   freeSorroundingTiles(i ,j) {

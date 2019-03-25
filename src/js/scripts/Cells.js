@@ -55,4 +55,29 @@ export default class Cells {
     }
     return false;
   }
+
+  createFlag() {
+    let pole1 = new createjs.Shape();
+    let pole2 = new createjs.Shape();
+    let flag = new createjs.Shape();
+
+    pole1.graphics.setStrokeStyle(3);
+    pole1.graphics.beginStroke('#000');
+    pole1.graphics.moveTo((this.x * this.size)+1, (this.y * this.size)+1);
+    pole1.graphics.lineTo((this.x * this.size) + this.size-1, (this.y * this.size) + this.size-1);
+    pole1.graphics.endStroke();
+
+    pole2.graphics.setStrokeStyle(3);
+    pole2.graphics.beginStroke('#000');
+    pole2.graphics.moveTo((this.x * this.size)+1, (this.y * this.size)+this.size-1);
+    pole2.graphics.lineTo((this.x * this.size) + this.size-1, (this.y * this.size) +1);
+    pole2.graphics.endStroke();
+
+    flag.graphics.beginFill("#8e2023").drawCircle(0, 0, this.size/3);
+    flag.x = (this.x * this.size) +1 + this.size/2;
+    flag.y = (this.y * this.size) +1 + this.size/2;
+
+    return [pole1, pole2, flag];
+    
+  }
 }
